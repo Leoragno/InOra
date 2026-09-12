@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, CalendarDays, FileText, Settings, BarChart3, MoreHorizontal } from 'lucide-react'
+import { LayoutDashboard, Users, CalendarDays, FileText, Settings, BarChart3, QrCode, MoreHorizontal } from 'lucide-react'
 import { AppShell, type NavItem } from '../components/AppShell'
 import { useAuth } from '../hooks/useAuth'
 
@@ -19,6 +19,7 @@ export function AdminLayout() {
     { to: '/admin/presenze', label: 'Presenze', icon: <CalendarDays size={17} /> },
     { to: '/admin/moduli', label: 'Moduli', icon: <FileText size={17} /> },
     { to: '/admin/statistiche', label: 'Statistiche', icon: <BarChart3 size={17} /> },
+    { to: '/admin/qr', label: 'QR Code', icon: <QrCode size={17} /> },
     { to: '/admin/gps', label: 'Impostazioni', icon: <Settings size={17} /> },
   ]
 

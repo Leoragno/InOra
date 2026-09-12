@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
 
 # Reference copy of the old vanilla-JS PWA (lives at github.com/Leoragno/timbratura),
 # kept locally for porting but not part of this app.

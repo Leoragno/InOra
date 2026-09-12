@@ -24,6 +24,7 @@ import { AdminModuloNuovoPage } from './pages/admin/AdminModuloNuovoPage'
 import { AdminModuloRisultatiPage } from './pages/admin/AdminModuloRisultatiPage'
 import { AdminPresenzeCalendarPage } from './pages/admin/AdminPresenzeCalendarPage'
 import { AdminStatistichePage } from './pages/admin/AdminStatistichePage'
+import { AdminQrPage } from './pages/admin/AdminQrPage'
 import { AdminAltroPage } from './pages/admin/AdminAltroPage'
 
 const ADMIN_ROLES = ['admin_jerago', 'admin_besnate', 'admin_general'] as const
@@ -60,6 +61,7 @@ export default function App() {
                   <Route path="moduli/:formId/risultati" element={<AdminModuloRisultatiPage />} />
                   <Route path="presenze" element={<AdminPresenzeCalendarPage />} />
                   <Route path="statistiche" element={<AdminStatistichePage />} />
+                  <Route path="qr" element={<AdminQrPage />} />
                   <Route path="altro" element={<AdminAltroPage />} />
                 </Route>
               </Route>

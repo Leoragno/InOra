@@ -108,9 +108,9 @@ function seed(): Db {
   const anna = mkProfile({ firstName: 'Anna', lastName: 'Verdi', role: 'animatore', email: 'anna.verdi@job.app', oratoryId: 'jerago', birthYear: 2005 })
   const matteo = mkProfile({ firstName: 'Matteo', lastName: 'Neri', role: 'animatore', email: 'matteo.neri@job.app', oratoryId: 'besnate', birthYear: 2006 })
   const giulia = mkProfile({ firstName: 'Giulia', lastName: 'Ferrari', role: 'animatore', email: 'giulia.ferrari@job.app', oratoryId: 'besnate', birthYear: 2007 })
-  const pending = mkProfile({ firstName: 'Leonardo', lastName: 'Ragno', role: 'animatore', email: 'leonardo@email.it', oratoryId: 'jerago', birthYear: 2007, status: 'pending' })
+  const leonardo = mkProfile({ firstName: 'Leonardo', lastName: 'Ragno', role: 'admin_general', email: 'leonardo@email.it', oratoryId: null, birthYear: 2007 })
 
-  const profiles = [adminJerago, adminBesnate, adminGeneral, marco, luca, anna, matteo, giulia, pending]
+  const profiles = [adminJerago, adminBesnate, adminGeneral, marco, luca, anna, matteo, giulia, leonardo]
 
   const accounts: DemoAccount[] = [
     { profileId: adminJerago.id, email: adminJerago.email, password: 'admin123' },
@@ -121,7 +121,7 @@ function seed(): Db {
     { profileId: anna.id, email: anna.email, password: 'password12' },
     { profileId: matteo.id, email: matteo.email, password: 'password12' },
     { profileId: giulia.id, email: giulia.email, password: 'password12' },
-    { profileId: pending.id, email: pending.email, password: 'password12' },
+    { profileId: leonardo.id, email: leonardo.email, password: 'admin123' },
   ]
 
   const timeEntries: TimeEntry[] = []

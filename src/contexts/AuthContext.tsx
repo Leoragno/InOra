@@ -7,7 +7,7 @@ interface AuthContextValue {
   loading: boolean
   login: (email: string, password: string) => Promise<Profile>
   register: (input: authService.RegisterInput) => Promise<Profile>
-  logout: () => void
+  logout: () => Promise<void>
   refresh: () => Promise<void>
 }
 
@@ -24,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     refresh().finally(() => setLoading(false))
+    return authService.onAuthStateChange(setUser)
   }, [refresh])
 
   const login = useCallback(async (email: string, password: string) => {
@@ -36,8 +37,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return authService.register(input)
   }, [])
 
-  const logout = useCallback(() => {
-    authService.logout()
+  const logout = useCallback(async () => {
+    await authService.logout()
     setUser(null)
   }, [])
 

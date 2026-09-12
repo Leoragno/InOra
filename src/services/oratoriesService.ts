@@ -1,14 +1,43 @@
-import { db, tick } from './db'
+import { supabase } from '../lib/supabaseClient'
 import { assertCanManageOratory } from '../utils/authz'
-import { writeAudit } from './auditService'
 import type { Oratory, OratoryId, Profile } from '../types'
 
+interface OratoryRow {
+  id: OratoryId
+  name: string
+  address: string
+  latitude: number
+  longitude: number
+  gps_enabled: boolean
+  gps_radius: number
+  created_at: string
+  updated_at: string
+}
+
+function mapOratory(row: OratoryRow): Oratory {
+  return {
+    id: row.id,
+    name: row.name,
+    address: row.address,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    gpsEnabled: row.gps_enabled,
+    gpsRadius: row.gps_radius,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  }
+}
+
 export async function listOratories(): Promise<Oratory[]> {
-  return tick([...db.get().oratories])
+  const { data, error } = await supabase.from('oratories').select('*').order('name')
+  if (error) throw error
+  return (data as OratoryRow[]).map(mapOratory)
 }
 
 export async function getOratory(id: OratoryId): Promise<Oratory | null> {
-  return tick(db.get().oratories.find((o) => o.id === id) ?? null)
+  const { data, error } = await supabase.from('oratories').select('*').eq('id', id).maybeSingle()
+  if (error || !data) return null
+  return mapOratory(data as OratoryRow)
 }
 
 export interface GpsUpdate {
@@ -18,13 +47,12 @@ export interface GpsUpdate {
 
 export async function updateGpsSettings(actor: Profile, id: OratoryId, update: GpsUpdate): Promise<Oratory> {
   assertCanManageOratory(actor, id)
-  const database = db.get()
-  const oratory = database.oratories.find((o) => o.id === id)
-  if (!oratory) throw new Error('Oratorio non trovato.')
-  oratory.gpsEnabled = update.gpsEnabled
-  oratory.gpsRadius = update.gpsRadius
-  oratory.updatedAt = new Date().toISOString()
-  db.save()
-  writeAudit(actor, 'oratory.gps_update', 'oratory', id, { ...update })
-  return tick({ ...oratory })
+  const { data, error } = await supabase
+    .from('oratories')
+    .update({ gps_enabled: update.gpsEnabled, gps_radius: update.gpsRadius, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return mapOratory(data as OratoryRow)
 }
