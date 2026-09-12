@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  body { margin:0; background:radial-gradient(1200px 700px at 20% -10%,#dfe6f7,transparent),radial-gradient(1000px 600px at 100% 10%,#e7e2f8,transparent),#e9edf5; font-family:'Plus Jakarta Sans',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  @keyframes jobUp { from { opacity:0; transform:translateY(14px) } to { opacity:1; transform:none } }
+  @keyframes jobIn { from { opacity:0 } to { opacity:1 } }
+  @keyframes jobPop { 0% { opacity:0; transform:scale(.82) } 60% { transform:scale(1.06) } 100% { opacity:1; transform:scale(1) } }
+  @keyframes jobRing { 0% { transform:scale(.85); opacity:.55 } 70% { transform:scale(1.9); opacity:0 } 100% { opacity:0 } }
+  @keyframes jobGrow { from { transform:scaleX(0) } to { transform:scaleX(1) } }
+  @keyframes jobRise { from { transform:scaleY(0) } to { transform:scaleY(1) } }
+  @keyframes jobFloat { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-6px) } }
+  @keyframes jobSheen { from { background-position:-260px 0 } to { background-position:320px 0 } }
+  @keyframes jobTwinkle { 0%,100% { opacity:.25 } 50% { opacity:.9 } }
+  @keyframes jobGlowPulse { 0%,100% { opacity:.5; transform:scale(1) } 50% { opacity:.85; transform:scale(1.07) } }
+  @keyframes jobSlideIn { from { opacity:0; transform:translateX(-10px) } to { opacity:1; transform:none } }
+  @keyframes jobCount { from { opacity:0; transform:translateY(8px) scale(.94) } to { opacity:1; transform:none } }
+  a { color:#4f46e5; text-decoration:none; }
+  a:hover { color:#3730a3; }
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:20px;padding:24px 24px 56px;box-sizing:border-box">
+
+  <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:6px;justify-content:center;max-width:1100px">
+    <sc-for list="{{ screens }}" as="s" hint-placeholder-count="16">
+      <sc-if value="{{ s.active }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ s.go }}" style="display:flex;align-items:center;gap:6px;border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-size:11.5px;font-weight:700;padding:7px 11px;border-radius:999px;white-space:nowrap;line-height:1.2;box-shadow:0 4px 10px rgba(79,70,229,.3)">
+          <span style="opacity:.6">{{ s.num }}</span>{{ s.label }}
+        </button>
+      </sc-if>
+      <sc-if value="{{ s.inactive }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ s.go }}" style="display:flex;align-items:center;gap:6px;border:1px solid #d3dae6;cursor:pointer;background:#fff;color:#475569;font-family:inherit;font-size:11.5px;font-weight:600;padding:7px 11px;border-radius:999px;white-space:nowrap;line-height:1.2" style-hover="border-color:#4f46e5;color:#4f46e5">
+          <span style="opacity:.45">{{ s.num }}</span>{{ s.label }}
+        </button>
+      </sc-if>
+    </sc-for>
+  </div>
+
+  <!-- ===================== MOBILE ===================== -->
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ true }}">
+  <div style="width:390px;height:844px;background:#0f172a;border-radius:52px;padding:11px;box-shadow:0 30px 70px rgba(15,23,42,.35);flex:none">
+    <div style="width:100%;height:100%;background:#f7f9fc;border-radius:42px;overflow:hidden;position:relative;display:flex;flex-direction:column">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 26px 6px;font-size:13px;font-weight:700;color:#0f172a;flex:none">
+        <span>9:41</span>
+        <span style="display:flex;gap:5px;align-items:center">
+          <span style="width:16px;height:9px;border-radius:2px;background:#0f172a;display:inline-block"></span>
+          <span style="width:13px;height:9px;border-radius:2px;background:#0f172a;display:inline-block"></span>
+          <span style="width:22px;height:10px;border-radius:3px;border:1.5px solid #0f172a;display:inline-block"></span>
+        </span>
+      </div>
+
+      <!-- 1 · Splash / Login -->
+      <sc-if value="{{ is1 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;position:relative;background:linear-gradient(180deg,#1e3a8a,#3730a3)">
+        <div style="position:absolute;left:0;right:0;top:0;height:41%;overflow:hidden">
+          <svg viewBox="0 0 390 480" preserveAspectRatio="xMidYMax slice" style="width:100%;height:100%;display:block">
+            <defs>
+              <linearGradient id="jobSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#152a63" /><stop offset=".55" stop-color="#2c3a86" /><stop offset="1" stop-color="#4c4499" /></linearGradient>
+              <linearGradient id="jobHill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2a6b" /><stop offset="1" stop-color="#171641" /></linearGradient>
+              <linearGradient id="jobWallL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b3f7d" /><stop offset="1" stop-color="#565ba4" /></linearGradient>
+              <linearGradient id="jobWallR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2b2f63" /><stop offset="1" stop-color="#3a3e7c" /></linearGradient>
+              <linearGradient id="jobRoof" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b5470" /><stop offset="1" stop-color="#4a3a55" /></linearGradient>
+              <radialGradient id="jobGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fde68a" stop-opacity=".55" /><stop offset="1" stop-color="#fde68a" stop-opacity="0" /></radialGradient>
+            </defs>
+            <rect width="390" height="480" fill="url(#jobSky)" />
+            <g transform="translate(0,104)">
+            <g fill="#fff">
+              <circle cx="48" cy="58" r="1.4" opacity=".7" style="animation:jobTwinkle 3.2s ease-in-out infinite" /><circle cx="92" cy="34" r="1" opacity=".5" style="animation:jobTwinkle 2.6s .4s ease-in-out infinite" />
+              <circle cx="140" cy="72" r="1.2" opacity=".55" style="animation:jobTwinkle 4s .8s ease-in-out infinite" /><circle cx="266" cy="40" r="1" opacity=".45" style="animation:jobTwinkle 3s 1.2s ease-in-out infinite" />
+              <circle cx="350" cy="118" r="1.3" opacity=".5" /><circle cx="196" cy="26" r="1" opacity=".4" />
+              <circle cx="308" cy="164" r="1.1" opacity=".35" />
+            </g>
+            <circle cx="322" cy="78" r="52" fill="url(#jobGlow)" style="animation:jobGlowPulse 6s ease-in-out infinite;transform-origin:322px 78px" />
+            <circle cx="322" cy="78" r="19" fill="#fde68a" opacity=".9" />
+
+            <path d="M0 300c48-26 96-32 150-18s96 16 148-4 62-22 92-26v208H0z" fill="url(#jobHill)" opacity=".85" />
+
+            <g transform="translate(120,140) scale(.6)">
+            <!-- campanile -->
+            <g>
+              <rect x="196" y="120" width="44" height="218" fill="url(#jobWallL)" />
+              <rect x="236" y="120" width="14" height="218" fill="#272a5c" />
+              <path d="M192 120h62l-31 -34z" fill="url(#jobRoof)" />
+              <path d="M223 86l31 34h-10z" fill="#3a2f46" />
+              <rect x="220" y="60" width="3.5" height="28" fill="#e9d8a6" />
+              <rect x="214" y="67" width="16" height="3.5" fill="#e9d8a6" />
+              <path d="M206 140h26v10h-26z" fill="#1d1f4d" opacity=".7" />
+              <path d="M210 168c0-7 4-12 9-12s9 5 9 12v22h-18z" fill="#0f1338" opacity=".85" />
+              <path d="M212 170c0-5 3-9 7-9s7 4 7 9v18h-14z" fill="#fcd34d" opacity=".55" />
+              <circle cx="219" cy="216" r="9" fill="#0f1338" opacity=".8" />
+              <circle cx="219" cy="216" r="7" fill="#fde68a" opacity=".7" />
+              <rect x="196" y="236" width="54" height="4" fill="#6f74b5" opacity=".5" />
+            </g>
+
+            <!-- navata -->
+            <g>
+              <path d="M96 214h104v124H96z" fill="url(#jobWallL)" />
+              <path d="M148 170l58 44H90z" fill="url(#jobRoof)" />
+              <path d="M148 170l58 44h-14l-44-33z" fill="#3d3149" />
+              <path d="M96 208h104v8H96z" fill="#6f74b5" opacity=".45" />
+              <!-- rosone -->
+              <circle cx="148" cy="238" r="13" fill="#1b1f4d" />
+              <circle cx="148" cy="238" r="9.5" fill="#fcd34d" opacity=".7" style="animation:jobGlowPulse 4.4s .6s ease-in-out infinite;transform-origin:148px 238px" />
+              <g stroke="#1b1f4d" stroke-width="1.6"><path d="M148 228v20M138 238h20M141 231l14 14M155 231l-14 14" /></g>
+              <!-- portale -->
+              <path d="M134 300c0-9 6-16 14-16s14 7 14 16v38h-28z" fill="#161a45" />
+              <path d="M137 302c0-7 5-13 11-13s11 6 11 13v36h-22z" fill="#f5b547" opacity=".6" style="animation:jobGlowPulse 5s ease-in-out infinite;transform-origin:148px 320px" />
+              <rect x="147" y="292" width="2" height="46" fill="#161a45" opacity=".6" />
+              <!-- finestre laterali -->
+              <path d="M108 268c0-5 3-9 7-9s7 4 7 9v24h-14z" fill="#131741" />
+              <path d="M110 270c0-4 2-7 5-7s5 3 5 7v22h-10z" fill="#fcd34d" opacity=".5" />
+              <path d="M176 268c0-5 3-9 7-9s7 4 7 9v24h-14z" fill="#131741" />
+              <path d="M178 270c0-4 2-7 5-7s5 3 5 7v22h-10z" fill="#fcd34d" opacity=".5" />
+              <!-- abside -->
+              <path d="M250 246h44v92h-44z" fill="url(#jobWallR)" />
+              <path d="M272 224l28 22h-56z" fill="#463a52" />
+              <path d="M262 280c0-5 3-9 7-9s7 4 7 9v20h-14z" fill="#131741" />
+            </g>
+
+            <!-- sagrato e gradini -->
+            <path d="M-160 338h720v14h-720z" fill="#1c1c49" />
+            <path d="M118 338h60v6h-60z" fill="#2f3068" />
+            <path d="M112 344h72v6h-72z" fill="#292a5f" />
+
+            <!-- cipressi e alberi -->
+            <g>
+              <path d="M56 250c8 0 14 16 14 42s-6 46-14 46-14-20-14-46 6-42 14-42z" fill="#14203f" opacity=".9" />
+              <rect x="54" y="330" width="4" height="12" fill="#101a34" />
+              <path d="M336 258c9 0 16 18 16 44s-7 36-16 36-16-10-16-36 7-44 16-44z" fill="#16223f" opacity=".85" />
+              <rect x="334" y="330" width="4" height="12" fill="#101a34" />
+              <circle cx="300" cy="300" r="20" fill="#1a2745" opacity=".75" />
+              <rect x="298" y="312" width="4" height="26" fill="#101a34" opacity=".8" />
+            </g>
+
+            </g>
+            <path d="M0 350c70-10 120 4 190 0s130-14 200-6v420H0z" fill="#12142f" opacity=".95" />
+            </g>
+          </svg>
+        </div>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,58,138,.45),rgba(49,46,129,.75));pointer-events:none"></div>
+        <div style="position:relative;flex:0 0 41%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;pointer-events:none">
+          <div style="font-size:56px;font-weight:800;letter-spacing:-2px;text-shadow:0 8px 30px rgba(0,0,0,.35);animation:jobPop .6s cubic-bezier(.2,.9,.3,1.3) both">JOB</div>
+          <div style="font-size:12px;font-weight:600;letter-spacing:.18em;opacity:.85;text-transform:uppercase;animation:jobUp .6s .15s both">Oratori · Presenze · Animatori</div>
+        </div>
+        <div style="position:relative;flex:1;background:#fff;border-radius:32px 32px 0 0;padding:30px 24px 30px;display:flex;flex-direction:column;gap:15px;box-shadow:0 -18px 40px rgba(15,23,42,.25);animation:jobUp .55s .1s both">
+          <div>
+            <div style="font-size:21px;font-weight:800;color:#0f172a">Benvenuto</div>
+            <div style="font-size:13px;color:#64748b;margin-top:3px">Accedi al tuo account per continuare</div>
+          </div>
+          <input placeholder="Email" style="animation:jobUp .5s .2s both;border:1px solid #dbe2ec;background:#f8fafc;border-radius:12px;padding:13px 14px;font-family:inherit;font-size:14px;color:#0f172a;outline:none" style-focus="border-color:#4f46e5;background:#fff" />
+          <input type="password" placeholder="Password" style="animation:jobUp .5s .28s both;border:1px solid #dbe2ec;background:#f8fafc;border-radius:12px;padding:13px 14px;font-family:inherit;font-size:14px;color:#0f172a;outline:none" style-focus="border-color:#4f46e5;background:#fff" />
+          <button onClick="{{ goHome }}" style="animation:jobUp .5s .36s both;border:none;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;font-family:inherit;font-weight:700;font-size:15px;padding:15px;border-radius:12px;box-shadow:0 10px 22px rgba(79,70,229,.32);transition:transform .16s,box-shadow .16s" style-hover="transform:translateY(-2px);box-shadow:0 16px 30px rgba(79,70,229,.42)" style-active="transform:translateY(1px)">Accedi</button>
+          <div style="text-align:center;font-size:12.5px;color:#64748b">Password dimenticata?</div>
+          <div style="text-align:center;font-size:12.5px;color:#64748b">Non hai un account? <a href="#" onClick="{{ go2 }}" style="font-weight:700">Registrati</a></div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- 2 · Registrazione step 1 -->
+      <sc-if value="{{ is2 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;background:#fff;padding:10px 24px 26px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <button onClick="{{ go1 }}" style="border:none;background:none;cursor:pointer;font-size:20px;color:#0f172a;padding:0">←</button>
+          <div style="flex:1;height:5px;border-radius:3px;background:#e8ecf4;overflow:hidden"><div style="width:50%;height:100%;background:#4f46e5;border-radius:3px"></div></div>
+          <div style="font-size:12px;font-weight:700;color:#94a3b8">1 / 2</div>
+        </div>
+        <div style="margin-top:26px;font-size:24px;font-weight:800;color:#0f172a">Crea il tuo account</div>
+        <div style="font-size:13.5px;color:#64748b;margin-top:5px">Prima raccontaci qualcosa di te.</div>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-top:26px">
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#475569">Nome
+            <input value="Leonardo" style="border:1px solid #dbe2ec;background:#f8fafc;border-radius:12px;padding:13px 14px;font-family:inherit;font-size:14px;color:#0f172a;font-weight:500;outline:none" style-focus="border-color:#4f46e5;background:#fff" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#475569">Cognome
+            <input value="Ragno" style="border:1px solid #dbe2ec;background:#f8fafc;border-radius:12px;padding:13px 14px;font-family:inherit;font-size:14px;color:#0f172a;font-weight:500;outline:none" style-focus="border-color:#4f46e5;background:#fff" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#475569">Anno di nascita
+            <select style="border:1px solid #dbe2ec;background:#f8fafc;border-radius:12px;padding:13px 14px;font-family:inherit;font-size:14px;color:#0f172a;font-weight:500;outline:none">
+              <option>2007</option><option>2006</option><option>2005</option>
+            </select>
+          </label>
+        </div>
+        <div style="flex:1"></div>
+        <button onClick="{{ go3 }}" style="border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-weight:700;font-size:15px;padding:15px;border-radius:12px;box-shadow:0 8px 18px rgba(79,70,229,.3)" style-hover="background:#4338ca">Continua</button>
+      </div>
+      </sc-if>
+
+      <!-- 3 · Registrazione step 2 -->
+      <sc-if value="{{ is3 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;background:#fff;padding:10px 24px 26px;overflow:auto">
+        <div style="display:flex;align-items:center;gap:14px">
+          <button onClick="{{ go2 }}" style="border:none;background:none;cursor:pointer;font-size:20px;color:#0f172a;padding:0">←</button>
+          <div style="flex:1;height:5px;border-radius:3px;background:#e8ecf4;overflow:hidden"><div style="width:100%;height:100%;background:#4f46e5;border-radius:3px"></div></div>
+          <div style="font-size:12px;font-weight:700;color:#94a3b8">2 / 2</div>
+        </div>
+        <div style="margin-top:26px;font-size:24px;font-weight:800;color:#0f172a">Dove fai l'animatore?</div>
+        <div style="font-size:13.5px;color:#64748b;margin-top:5px">Scegli il tuo oratorio e completa la registrazione.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:22px">
+          <sc-for list="{{ oratori }}" as="o" hint-placeholder-count="2">
+            <sc-if value="{{ o.selected }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:13px;text-align:left;cursor:pointer;border:2px solid #4f46e5;background:#eef2ff;border-radius:16px;padding:13px;font-family:inherit">
+                <span style="width:46px;height:46px;border-radius:12px;flex:none;display:flex;align-items:center;justify-content:center;background:{{ o.tile }}"><svg viewBox="0 0 24 24" width="24" height="24" fill="{{ o.ink }}"><path d="M11 2h2v3h3v2h-3v3l6 4v10h-7v-5h-2v5H3V14l6-4V7H6V5h3z" /></svg></span>
+                <span style="flex:1"><span style="display:block;font-size:15px;font-weight:700;color:#0f172a">{{ o.nome }}</span><span style="display:block;font-size:12px;color:#64748b;margin-top:2px">{{ o.desc }}</span></span>
+                <span style="width:22px;height:22px;border-radius:50%;background:#4f46e5;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none">✓</span>
+              </button>
+            </sc-if>
+            <sc-if value="{{ o.unselected }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:13px;text-align:left;cursor:pointer;border:1px solid #dbe2ec;background:#fff;border-radius:16px;padding:13px;font-family:inherit" style-hover="border-color:#a5b4fc">
+                <span style="width:46px;height:46px;border-radius:12px;flex:none;display:flex;align-items:center;justify-content:center;background:{{ o.tile }}"><svg viewBox="0 0 24 24" width="24" height="24" fill="{{ o.ink }}"><path d="M11 2h2v3h3v2h-3v3l6 4v10h-7v-5h-2v5H3V14l6-4V7H6V5h3z" /></svg></span>
+                <span style="flex:1"><span style="display:block;font-size:15px;font-weight:700;color:#0f172a">{{ o.nome }}</span><span style="display:block;font-size:12px;color:#64748b;margin-top:2px">{{ o.desc }}</span></span>
+                <span style="width:22px;height:22px;border-radius:50%;border:1.5px solid #cbd5e1;flex:none"></span>
+              </button>
+            </sc-if>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#475569">Email
+            <input value="leonardo@email.it" style="border:1px solid #dbe2ec;background:#f8fafc;border-radius:12px;padding:13px 14px;font-family:inherit;font-size:14px;color:#0f172a;font-weight:500;outline:none" style-focus="border-color:#4f46e5;background:#fff" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#475569">Password
+            <input type="password" value="password12" style="border:1px solid #dbe2ec;background:#f8fafc;border-radius:12px;padding:13px 14px;font-family:inherit;font-size:14px;color:#0f172a;font-weight:500;outline:none" style-focus="border-color:#4f46e5;background:#fff" />
+          </label>
+        </div>
+        <div style="flex:1;min-height:18px"></div>
+        <button onClick="{{ go4 }}" style="border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-weight:700;font-size:15px;padding:15px;border-radius:12px;box-shadow:0 8px 18px rgba(79,70,229,.3)" style-hover="background:#4338ca">Crea account</button>
+      </div>
+      </sc-if>
+
+      <!-- 4 · Richiesta inviata -->
+      <sc-if value="{{ is4 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#fff;padding:30px 34px;gap:14px">
+        <div style="position:relative;width:74px;height:74px;display:flex;align-items:center;justify-content:center;animation:jobPop .6s cubic-bezier(.2,.9,.3,1.3) both">
+          <span style="position:absolute;inset:0;border-radius:50%;background:#10b981;animation:jobRing 2.4s ease-out infinite"></span>
+          <span style="position:relative;width:74px;height:74px;border-radius:50%;background:#10b981;color:#fff;font-size:34px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 26px rgba(16,185,129,.32)">✓</span>
+        </div>
+        <div style="font-size:23px;font-weight:800;color:#0f172a;margin-top:4px;animation:jobUp .5s .1s both">Richiesta inviata!</div>
+        <div style="font-size:13.5px;color:#64748b;line-height:1.55;text-wrap:pretty;animation:jobUp .5s .18s both">Il tuo account è in attesa di approvazione da parte dell'admin del tuo oratorio. Ti avviseremo quando sarà possibile accedere.</div>
+        <button onClick="{{ go1 }}" style="margin-top:8px;border:none;cursor:pointer;background:#eef2ff;color:#4f46e5;font-family:inherit;font-weight:700;font-size:14px;padding:13px 28px;border-radius:12px;transition:transform .18s,background .18s;animation:jobUp .5s .26s both" style-hover="background:#e0e7ff;transform:translateY(-2px)">Torna al login</button>
+        <div style="flex:0 0 auto;height:150px;width:100%;margin-top:14px;animation:jobFloat 6s ease-in-out infinite">
+          <svg viewBox="0 0 300 150" style="width:100%;height:100%;display:block">
+            <g fill="#c7d2fe">
+              <circle cx="44" cy="96" r="20" /><rect x="41" y="104" width="6" height="24" />
+              <circle cx="262" cy="102" r="16" /><rect x="259" y="108" width="5" height="20" />
+            </g>
+            <g fill="#a5b4fc">
+              <path d="M112 70h76v58h-76z" />
+              <path d="M150 42l44 30h-88z" />
+              <rect x="136" y="20" width="16" height="40" rx="4" />
+              <rect x="141" y="4" width="6" height="18" rx="3" />
+              <rect x="131" y="11" width="26" height="6" rx="3" />
+            </g>
+            <g fill="#eef2ff">
+              <path d="M142 98h16v30h-16z" />
+              <circle cx="150" cy="100" r="8" />
+              <rect x="122" y="84" width="12" height="16" rx="6" />
+              <rect x="166" y="84" width="12" height="16" rx="6" />
+            </g>
+            <rect x="0" y="128" width="300" height="6" rx="3" fill="#e0e7ff" />
+          </svg>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- 5/6 · Home animatore -->
+      <sc-if value="{{ is5 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;overflow:auto">
+        <div style="padding:14px 22px 0;display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:22px;font-weight:800;color:#0f172a">Ciao Leonardo</div>
+            <div style="font-size:13px;color:#64748b;margin-top:3px">Jerago</div>
+          </div>
+          <button onClick="{{ go10 }}" style="width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;padding:0;overflow:hidden;font-family:inherit;transition:transform .18s,box-shadow .18s" style-hover="transform:scale(1.06);box-shadow:0 6px 16px rgba(15,23,42,.15)"><span style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#22d3ee);color:#fff;font-size:13px;font-weight:800">LR</span></button>
+        </div>
+
+        <div style="padding:18px 22px 0">
+          <sc-if value="{{ nonTimbrato }}" hint-placeholder-val="{{ true }}">
+            <div style="border:1px solid #e2e8f0;background:#fff;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 10px 30px rgba(15,23,42,.07);animation:jobUp .45s both">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="position:relative;width:10px;height:10px;display:inline-flex"><span style="position:absolute;inset:0;border-radius:50%;background:#94a3b8;animation:jobRing 2.6s ease-out infinite"></span><span style="position:relative;width:10px;height:10px;border-radius:50%;background:#94a3b8"></span></span>
+                <span style="font-size:12.5px;font-weight:800;letter-spacing:.1em;color:#475569">NON TIMBRATO</span>
+              </div>
+              <div style="font-size:13px;color:#64748b">Sei nell'oratorio · 24 m di distanza</div>
+              <div style="height:6px;border-radius:4px;background:#eef2f7;overflow:hidden"><div style="width:48%;height:100%;border-radius:4px;background:linear-gradient(90deg,#6366f1,#22d3ee);transform-origin:left;animation:jobGrow .9s cubic-bezier(.2,.8,.2,1) both"></div></div>
+              <button onClick="{{ entrata }}" style="border:none;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;font-family:inherit;font-weight:700;font-size:15.5px;padding:15px;border-radius:14px;box-shadow:0 12px 26px rgba(79,70,229,.34);transition:transform .16s,box-shadow .16s" style-hover="transform:translateY(-2px);box-shadow:0 16px 32px rgba(79,70,229,.42)" style-active="transform:translateY(1px)">Entrata</button>
+              <button onClick="{{ go7 }}" style="border:none;background:none;cursor:pointer;font-family:inherit;font-size:12px;color:#94a3b8">Simula timbratura fuori area</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ timbrato }}" hint-placeholder-val="{{ true }}">
+            <div style="border:1.5px solid #6ee7b7;background:linear-gradient(160deg,#ecfdf5,#d7f7ea);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 30px rgba(16,185,129,.16);animation:jobPop .45s cubic-bezier(.2,.9,.3,1.2) both">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="position:relative;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center"><span style="position:absolute;inset:0;border-radius:50%;background:#10b981;animation:jobRing 2.2s ease-out infinite"></span><span style="position:relative;width:22px;height:22px;border-radius:50%;background:#10b981;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">✓</span></span>
+                <span style="font-size:12.5px;font-weight:800;letter-spacing:.1em;color:#047857">SEI PRESENTE</span>
+              </div>
+              <div style="font-size:26px;font-weight:800;color:#065f46;letter-spacing:-.5px">Entrata {{ oraEntrata }}</div>
+              <div style="font-size:12.5px;color:#047857;font-weight:600">Jerago · 24 m dall'oratorio</div>
+              <button onClick="{{ uscita }}" style="border:none;cursor:pointer;background:linear-gradient(135deg,#ef4444,#f97066);color:#fff;font-family:inherit;font-weight:700;font-size:15.5px;padding:15px;border-radius:14px;box-shadow:0 12px 26px rgba(239,68,68,.3);transition:transform .16s,box-shadow .16s" style-hover="transform:translateY(-2px);box-shadow:0 16px 32px rgba(239,68,68,.38)" style-active="transform:translateY(1px)">Uscita</button>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="padding:22px 22px 0;display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-size:15px;font-weight:800;color:#0f172a">Oggi</div>
+          <div style="font-size:12px;color:#94a3b8;font-weight:600">8 Settembre 2026</div>
+        </div>
+        <div style="margin:10px 22px 0;background:#fff;border:1px solid #e8edf4;border-radius:16px;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #f1f5f9;font-size:13.5px;color:#475569"><span>Entrata</span><span style="font-weight:700;color:#0f172a">{{ rigaEntrata }}</span></div>
+          <div style="display:flex;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #f1f5f9;font-size:13.5px;color:#475569"><span>Uscita</span><span style="font-weight:700;color:#0f172a">{{ rigaUscita }}</span></div>
+          <div style="display:flex;justify-content:space-between;padding:13px 16px;font-size:13.5px;color:#475569"><span>Totale</span><span style="font-weight:700;color:#0f172a">{{ rigaTotale }}</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 22px 24px">
+          <button onClick="{{ go8 }}" style="text-align:left;cursor:pointer;border:1px solid #e8edf4;background:#fff;border-radius:18px;padding:16px;font-family:inherit;box-shadow:0 6px 18px rgba(15,23,42,.05);transition:transform .18s,box-shadow .18s,border-color .18s;animation:jobUp .5s .1s both" style-hover="border-color:#a5b4fc;transform:translateY(-3px);box-shadow:0 14px 30px rgba(79,70,229,.14)">
+            <span style="display:block;width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#22d3ee)"></span>
+            <span style="display:block;margin-top:10px;font-size:13.5px;font-weight:700;color:#0f172a">Le mie presenze</span>
+          </button>
+          <button onClick="{{ go9 }}" style="text-align:left;cursor:pointer;border:1px solid #e8edf4;background:#fff;border-radius:18px;padding:16px;font-family:inherit;box-shadow:0 6px 18px rgba(15,23,42,.05);transition:transform .18s,box-shadow .18s,border-color .18s;animation:jobUp .5s .18s both" style-hover="border-color:#a5b4fc;transform:translateY(-3px);box-shadow:0 14px 30px rgba(79,70,229,.14)">
+            <span style="display:block;width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,#f59e0b,#fb7185)"></span>
+            <span style="display:block;margin-top:10px;font-size:13.5px;font-weight:700;color:#0f172a">Moduli</span>
+          </button>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- 7 · Fuori area -->
+      <sc-if value="{{ is7 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;background:#fff;padding:10px 26px 30px">
+        <button onClick="{{ go5 }}" style="border:none;background:none;cursor:pointer;font-size:20px;color:#0f172a;padding:0;align-self:flex-start">←</button>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px">
+          <div style="width:78px;height:78px;border-radius:50%;background:#fee2e2;color:#ef4444;font-size:38px;font-weight:700;display:flex;align-items:center;justify-content:center">!</div>
+          <div style="font-size:22px;font-weight:800;color:#ef4444;margin-top:4px">Sei troppo lontano</div>
+          <div style="font-size:14px;color:#64748b;line-height:1.55">Devi trovarti vicino all'oratorio per timbrare.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin-top:16px">
+            <div style="border:1px solid #e8edf4;border-radius:16px;padding:14px"><div style="font-size:11.5px;color:#94a3b8;font-weight:600">Distanza attuale</div><div style="font-size:24px;font-weight:800;color:#0f172a;margin-top:4px">183 m</div></div>
+            <div style="border:1px solid #e8edf4;border-radius:16px;padding:14px"><div style="font-size:11.5px;color:#94a3b8;font-weight:600">Raggio consentito</div><div style="font-size:24px;font-weight:800;color:#0f172a;margin-top:4px">50 m</div></div>
+          </div>
+        </div>
+        <button onClick="{{ go5 }}" style="border:none;cursor:pointer;background:#fee2e2;color:#ef4444;font-family:inherit;font-weight:700;font-size:15px;padding:15px;border-radius:12px" style-hover="background:#fecaca">Ho capito</button>
+      </div>
+      </sc-if>
+
+      <!-- 8 · Le mie presenze -->
+      <sc-if value="{{ is8 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;overflow:auto">
+        <div style="padding:14px 22px 0;font-size:22px;font-weight:800;color:#0f172a">Le mie presenze</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px 0">
+          <button onClick="{{ mesePrev }}" style="border:1px solid #e2e8f0;background:#fff;border-radius:10px;width:32px;height:32px;cursor:pointer;color:#475569;font-family:inherit">‹</button>
+          <div style="font-size:14.5px;font-weight:700;color:#0f172a">{{ mese }}</div>
+          <button onClick="{{ meseNext }}" style="border:1px solid #e2e8f0;background:#fff;border-radius:10px;width:32px;height:32px;cursor:pointer;color:#475569;font-family:inherit">›</button>
+        </div>
+        <div style="margin:16px 22px 0;background:linear-gradient(150deg,#ecfdf5,#d6f5e9);border:1.5px solid #a7f3d0;border-radius:20px;padding:18px;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;box-shadow:0 10px 26px rgba(16,185,129,.14);animation:jobUp .45s both">
+          <div>
+            <div style="font-size:30px;font-weight:800;color:#065f46;letter-spacing:-.8px">24h 35m</div>
+            <div style="font-size:12.5px;color:#047857;margin-top:4px;font-weight:600">Ore totali</div>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:5px;height:52px">
+            <sc-for list="{{ barre }}" as="b" hint-placeholder-count="7">
+              <span style="width:9px;border-radius:4px 4px 2px 2px;background:#10b981;transform-origin:bottom;height:{{ b.h }};opacity:{{ b.o }};animation:jobRise .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:{{ b.d }}"></span>
+            </sc-for>
+          </div>
+        </div>
+        <div style="margin:12px 22px 0;background:#fff;border:1px solid #e8edf4;border-radius:18px;padding:16px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:12.5px;color:#94a3b8;font-weight:600">Questa settimana</div><div style="font-size:19px;font-weight:800;color:#0f172a;margin-top:3px">12h 20m</div></div>
+          <div style="width:38px;height:38px;border-radius:12px;background:#eef2ff"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:16px 22px 24px">
+          <sc-for list="{{ giorni }}" as="g" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #e8edf4;border-radius:16px;padding:13px 15px;box-shadow:0 4px 14px rgba(15,23,42,.04);transition:transform .16s,box-shadow .16s;animation:jobUp .45s both" style-hover="transform:translateY(-2px);box-shadow:0 12px 26px rgba(15,23,42,.09)">
+              <div style="text-align:center;min-width:30px"><div style="font-size:15px;font-weight:800;color:#0f172a">{{ g.giorno }}</div><div style="font-size:9.5px;font-weight:700;color:#94a3b8;letter-spacing:.06em">{{ g.mese }}</div></div>
+              <div style="width:7px;height:7px;border-radius:50%;background:#10b981"></div>
+              <div style="flex:1;font-size:13.5px;color:#475569;font-weight:600">{{ g.orario }}</div>
+              <div style="font-size:13.5px;font-weight:800;color:#0f172a">{{ g.ore }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- 9 · Moduli -->
+      <sc-if value="{{ is9 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;overflow:auto">
+        <div style="padding:14px 22px 0;font-size:22px;font-weight:800;color:#0f172a">Moduli</div>
+        <div style="padding:12px 22px 0"><span style="display:inline-block;background:#eef2ff;color:#4f46e5;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px">{{ daCompilare }} da compilare</span></div>
+        <div style="display:flex;flex-direction:column;gap:12px;padding:16px 22px 24px">
+          <sc-for list="{{ moduli }}" as="m" hint-placeholder-count="2">
+            <div style="background:#fff;border:1px solid #e8edf4;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 6px 18px rgba(15,23,42,.05);transition:transform .18s,box-shadow .18s;animation:jobUp .45s both" style-hover="transform:translateY(-2px);box-shadow:0 14px 28px rgba(15,23,42,.09)">
+              <div style="display:flex;gap:11px;align-items:flex-start">
+                <span style="width:34px;height:34px;border-radius:10px;background:#eef2ff;flex:none"></span>
+                <span style="flex:1"><span style="display:block;font-size:15px;font-weight:700;color:#0f172a">{{ m.titolo }}</span><span style="display:block;font-size:12px;color:#ef4444;font-weight:600;margin-top:3px">{{ m.scadenza }}</span></span>
+              </div>
+              <sc-if value="{{ m.aperto }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ m.compila }}" style="border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-weight:700;font-size:14px;padding:12px;border-radius:11px" style-hover="background:#4338ca">Compila →</button>
+              </sc-if>
+              <sc-if value="{{ m.fatto }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#ecfdf5;color:#047857;font-weight:700;font-size:13.5px;padding:12px;border-radius:11px;text-align:center">✓ Inviato</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- 10 · Profilo -->
+      <sc-if value="{{ is10 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;overflow:auto">
+        <button onClick="{{ go5 }}" style="border:none;background:none;cursor:pointer;font-size:20px;color:#0f172a;padding:12px 0 0 22px;align-self:flex-start">←</button>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px;padding:6px 22px 0">
+          <div style="width:96px;height:96px;border-radius:50%;padding:3px;background:linear-gradient(135deg,#4f46e5,#22d3ee);box-shadow:0 14px 30px rgba(79,70,229,.28);animation:jobPop .5s cubic-bezier(.2,.9,.3,1.2) both"><div style="width:100%;height:100%;border-radius:50%;overflow:hidden;background:#e2e8f0"><image-slot id="job-profilo-avatar" shape="circle" placeholder="Foto profilo"></image-slot></div></div>
+          <div style="font-size:20px;font-weight:800;color:#0f172a;margin-top:6px">Leonardo Ragno</div>
+          <div style="font-size:13px;color:#64748b">Jerago · 2007</div>
+          <div style="background:#ecfdf5;color:#047857;font-size:12px;font-weight:700;padding:5px 13px;border-radius:999px;margin-top:4px">Animatore</div>
+        </div>
+        <div style="margin:22px 22px 24px;background:#fff;border:1px solid #e8edf4;border-radius:18px;overflow:hidden">
+          <sc-for list="{{ vociProfilo }}" as="v" hint-placeholder-count="4">
+            <button onClick="{{ v.go }}" style="width:100%;display:flex;align-items:center;gap:12px;text-align:left;border:none;border-bottom:1px solid #f1f5f9;background:#fff;cursor:pointer;padding:16px;font-family:inherit;transition:background .16s,padding-left .16s;animation:jobSlideIn .4s both" style-hover="background:#f8fafc;padding-left:20px">
+              <span style="width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#22d3ee);flex:none"></span>
+              <span style="flex:1;font-size:14px;font-weight:600;color:#0f172a">{{ v.label }}</span>
+              <span style="color:#cbd5e1">›</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- 12 · Elenco animatori (admin) -->
+      <sc-if value="{{ is12 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;overflow:auto">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 22px 0">
+          <button onClick="{{ go11 }}" style="border:none;background:none;cursor:pointer;font-size:20px;color:#0f172a;padding:0">←</button>
+          <div style="font-size:20px;font-weight:800;color:#0f172a">Animatori</div>
+        </div>
+        <div style="padding:14px 22px 0"><input placeholder="Cerca animatore…" style="width:100%;box-sizing:border-box;border:1px solid #dbe2ec;background:#f8fafc;border-radius:12px;padding:11px 14px;font-family:inherit;font-size:13.5px;outline:none" style-focus="border-color:#4f46e5;background:#fff" /></div>
+        <div style="display:flex;gap:8px;padding:12px 22px 0">
+          <sc-for list="{{ filtri }}" as="f" hint-placeholder-count="3">
+            <sc-if value="{{ f.active }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ f.pick }}" style="flex:1;border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-size:12.5px;font-weight:700;padding:8px;border-radius:999px">{{ f.label }}</button>
+            </sc-if>
+            <sc-if value="{{ f.inactive }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ f.pick }}" style="flex:1;border:1px solid #e2e8f0;cursor:pointer;background:#fff;color:#475569;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px;border-radius:999px" style-hover="border-color:#a5b4fc">{{ f.label }}</button>
+            </sc-if>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:14px 22px 24px">
+          <sc-for list="{{ animatoriFiltrati }}" as="a" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e8edf4;border-radius:16px;padding:13px 15px;transition:transform .16s,box-shadow .16s;animation:jobUp .4s both" style-hover="transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.08)">
+              <span style="width:8px;height:8px;border-radius:50%;background:{{ a.dot }};flex:none"></span>
+              <span style="width:34px;height:34px;border-radius:50%;background:#eef2ff;flex:none"></span>
+              <span style="flex:1"><span style="display:block;font-size:14px;font-weight:700;color:#0f172a">{{ a.nome }}</span><span style="display:block;font-size:12px;color:#64748b;margin-top:2px">{{ a.stato }}</span></span>
+              <span style="font-size:13px;font-weight:700;color:#0f172a">{{ a.ore }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:0 22px 26px">
+          <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:16px;padding:15px;display:flex;flex-direction:column;gap:11px">
+            <div style="font-size:13.5px;font-weight:700;color:#92400e">1 richiesta di iscrizione</div>
+            <div style="display:flex;align-items:center;gap:11px">
+              <span style="width:34px;height:34px;border-radius:50%;background:#fef3c7;flex:none"></span>
+              <span style="flex:1;font-size:14px;font-weight:700;color:#0f172a">Leonardo Ragno<span style="display:block;font-size:12px;font-weight:500;color:#a16207">Jerago · 2007</span></span>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button onClick="{{ approva }}" style="flex:1;border:none;cursor:pointer;background:#10b981;color:#fff;font-family:inherit;font-weight:700;font-size:13px;padding:11px;border-radius:11px" style-hover="background:#059669">Approva</button>
+              <button onClick="{{ approva }}" style="flex:1;border:1px solid #e2e8f0;cursor:pointer;background:#fff;color:#64748b;font-family:inherit;font-weight:700;font-size:13px;padding:11px;border-radius:11px" style-hover="border-color:#ef4444;color:#ef4444">Rifiuta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- 13 · Impostazioni GPS -->
+      <sc-if value="{{ is13 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:flex;flex-direction:column;overflow:auto">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 22px 0">
+          <button onClick="{{ go11 }}" style="border:none;background:none;cursor:pointer;font-size:20px;color:#0f172a;padding:0">←</button>
+          <div style="font-size:20px;font-weight:800;color:#0f172a">Impostazioni GPS</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;padding:18px 22px 0">
+          <sc-for list="{{ sediGps }}" as="s" hint-placeholder-count="2">
+            <div style="background:#fff;border:1px solid #e8edf4;border-radius:18px;padding:17px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:center;gap:9px">
+                <span style="width:10px;height:10px;border-radius:50%;background:{{ s.ink }}"></span>
+                <div style="font-size:16px;font-weight:800;color:#0f172a">{{ s.nome }}</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                <div style="font-size:13px;color:#475569;font-weight:600">GPS obbligatorio</div>
+                <sc-if value="{{ s.on }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ s.toggle }}" style="width:46px;height:26px;border-radius:999px;border:none;cursor:pointer;background:#10b981;display:flex;align-items:center;justify-content:flex-end;padding:3px;transition:background .2s"><span style="width:20px;height:20px;border-radius:50%;background:#fff;display:block"></span></button>
+                </sc-if>
+                <sc-if value="{{ s.off }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ s.toggle }}" style="width:46px;height:26px;border-radius:999px;border:none;cursor:pointer;background:#cbd5e1;display:flex;align-items:center;justify-content:flex-start;padding:3px"><span style="width:20px;height:20px;border-radius:50%;background:#fff;display:block"></span></button>
+                </sc-if>
+              </div>
+              <div>
+                <div style="font-size:12px;color:#94a3b8;font-weight:600">Posizione oratorio</div>
+                <div style="font-size:13.5px;color:#0f172a;font-weight:700;margin-top:3px">{{ s.coord }}</div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;font-weight:600"><span>Raggio consentito</span><span style="color:#4f46e5;font-weight:800">{{ s.raggio }} m</span></div>
+                <input type="range" min="20" max="200" step="5" value="{{ s.raggio }}" onChange="{{ s.setRaggio }}" style="width:100%;margin-top:8px;accent-color:#4f46e5" />
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:18px 22px 26px">
+          <button onClick="{{ salvato }}" style="width:100%;border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-weight:700;font-size:15px;padding:15px;border-radius:12px;box-shadow:0 8px 18px rgba(79,70,229,.3)" style-hover="background:#4338ca">{{ testoSalva }}</button>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- bottom nav -->
+      <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #e8edf4;background:#fff;padding:9px 8px 20px">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+          <sc-if value="{{ n.active }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ n.go }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;border:none;background:none;cursor:pointer;font-family:inherit">
+              <span style="width:22px;height:3px;border-radius:2px;background:#4f46e5;animation:jobGrow .3s cubic-bezier(.2,.8,.2,1) both"></span>
+              <span style="font-size:11px;font-weight:700;color:#4f46e5">{{ n.label }}</span>
+            </button>
+          </sc-if>
+          <sc-if value="{{ n.inactive }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ n.go }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;border:none;background:none;cursor:pointer;font-family:inherit" style-hover="opacity:.7">
+              <span style="width:22px;height:3px;border-radius:2px;background:#e2e8f0"></span>
+              <span style="font-size:11px;font-weight:600;color:#94a3b8">{{ n.label }}</span>
+            </button>
+          </sc-if>
+        </sc-for>
+      </div>
+      </sc-if>
+
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ===================== DESKTOP ===================== -->
+  <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+  <div style="width:1180px;max-width:100%;height:720px;background:#fff;border-radius:18px;overflow:hidden;display:flex;box-shadow:0 30px 70px rgba(15,23,42,.22)">
+    <div style="width:206px;flex:none;background:#0f1a33;display:flex;flex-direction:column;padding:20px 14px;gap:22px">
+      <div style="font-size:24px;font-weight:800;color:#fff;letter-spacing:-1px;padding-left:8px">JOB</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <sc-for list="{{ adminNav }}" as="a" hint-placeholder-count="6">
+          <sc-if value="{{ a.active }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ a.go }}" style="text-align:left;border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-size:13.5px;font-weight:700;padding:11px 12px;border-radius:10px">{{ a.label }}</button>
+          </sc-if>
+          <sc-if value="{{ a.inactive }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ a.go }}" style="text-align:left;border:none;cursor:pointer;background:transparent;color:#94a3b8;font-family:inherit;font-size:13.5px;font-weight:600;padding:11px 12px;border-radius:10px;transition:background .16s,color .16s,padding-left .16s;animation:jobSlideIn .4s both" style-hover="background:#1c2a4d;color:#fff;padding-left:16px">{{ a.label }}</button>
+          </sc-if>
+        </sc-for>
+      </div>
+      <div style="flex:1"></div>
+      <div style="color:#64748b;font-size:12px;font-weight:600;padding-left:8px">{{ sedeCorrente }}</div>
+    </div>
+
+    <div style="flex:1;background:#f5f7fb;display:flex;flex-direction:column;overflow:hidden">
+      <div style="flex:none;display:flex;justify-content:space-between;align-items:center;padding:16px 26px;background:#fff;border-bottom:1px solid #e8edf4">
+        <div style="font-size:18px;font-weight:800;color:#0f172a">{{ titoloDesktop }}</div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="width:30px;height:30px;border-radius:50%;background:#4f46e5;color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ inizialiAdmin }}</span>
+          <span style="font-size:13px;font-weight:600;color:#475569">{{ nomeAdmin }}</span>
+        </div>
+      </div>
+
+      <div style="flex:1;overflow:auto;padding:24px 26px">
+
+        <!-- 11 · Dashboard oratorio -->
+        <sc-if value="{{ is11 }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+            <div style="background:#fff;border:1px solid #e8edf4;border-radius:18px;padding:20px;box-shadow:0 8px 24px rgba(15,23,42,.05);animation:jobUp .4s both">
+              <div style="font-size:36px;font-weight:800;color:#10b981;letter-spacing:-1px">24</div>
+              <div style="font-size:13px;color:#64748b;font-weight:600;margin-top:2px">Presenti oggi</div>
+              <div style="height:6px;border-radius:4px;background:#eef2f7;margin-top:14px;overflow:hidden"><div style="width:75%;height:100%;background:linear-gradient(90deg,#10b981,#5eead4);transform-origin:left;animation:jobGrow .9s cubic-bezier(.2,.8,.2,1) both"></div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8edf4;border-radius:18px;padding:20px;box-shadow:0 8px 24px rgba(15,23,42,.05);animation:jobUp .4s .08s both">
+              <div style="font-size:36px;font-weight:800;color:#ef4444;letter-spacing:-1px">8</div>
+              <div style="font-size:13px;color:#64748b;font-weight:600;margin-top:2px">Assenti</div>
+              <div style="height:6px;border-radius:4px;background:#eef2f7;margin-top:14px;overflow:hidden"><div style="width:25%;height:100%;background:linear-gradient(90deg,#ef4444,#fca5a5);transform-origin:left;animation:jobGrow .9s .1s cubic-bezier(.2,.8,.2,1) both"></div></div>
+            </div>
+            <div style="background:linear-gradient(150deg,#0f1a33,#25306b);border-radius:18px;padding:20px;color:#fff;box-shadow:0 12px 30px rgba(15,26,51,.28);display:flex;align-items:flex-end;justify-content:space-between;gap:12px;animation:jobUp .4s .16s both">
+              <div>
+                <div style="font-size:36px;font-weight:800;letter-spacing:-1px">126h</div>
+                <div style="font-size:13px;color:#a5b0d0;font-weight:600;margin-top:2px">Ore questo mese</div>
+              </div>
+              <div style="display:flex;align-items:flex-end;gap:5px;height:52px">
+                <sc-for list="{{ barre }}" as="b" hint-placeholder-count="7">
+                  <span style="width:8px;border-radius:4px 4px 2px 2px;background:#818cf8;transform-origin:bottom;height:{{ b.h }};opacity:{{ b.o }};animation:jobRise .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:{{ b.d }}"></span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start">
+            <div style="background:#fff;border:1px solid #e8edf4;border-radius:16px;padding:20px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:15px;font-weight:800;color:#0f172a">Presenze oggi</div><a href="#" onClick="{{ go16 }}" style="font-size:12.5px;font-weight:700">Vedi tutte →</a></div>
+              <div style="display:flex;flex-direction:column;margin-top:12px">
+                <sc-for list="{{ animatori }}" as="a" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9;animation:jobSlideIn .45s both">
+                    <span style="width:8px;height:8px;border-radius:50%;background:{{ a.dot }}"></span>
+                    <span style="flex:1;font-size:13.5px;font-weight:600;color:#0f172a">{{ a.nome }}</span>
+                    <span style="font-size:13px;font-weight:700;color:#475569">{{ a.entrata }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="background:#fff;border:1px solid #e8edf4;border-radius:16px;padding:20px">
+                <div style="font-size:15px;font-weight:800;color:#0f172a">Statistiche</div>
+                <div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
+                  <div style="display:flex;justify-content:space-between;font-size:13.5px;color:#64748b;font-weight:600"><span>Animatori</span><span style="color:#0f172a;font-weight:800">24</span></div>
+                  <div style="display:flex;justify-content:space-between;font-size:13.5px;color:#64748b;font-weight:600"><span>Moduli attivi</span><span style="color:#0f172a;font-weight:800">3</span></div>
+                  <div style="display:flex;justify-content:space-between;font-size:13.5px;color:#64748b;font-weight:600"><span>Media ore</span><span style="color:#0f172a;font-weight:800">5h 12m</span></div>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid #e8edf4;border-radius:16px;padding:20px">
+                <div style="font-size:15px;font-weight:800;color:#0f172a">Attività recente</div>
+                <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+                  <div style="font-size:12.5px;color:#475569;line-height:1.45"><strong style="color:#0f172a">Nuovo modulo inviato</strong><br />Presenza settimana 2 · 10:24</div>
+                  <div style="font-size:12.5px;color:#475569;line-height:1.45"><strong style="color:#0f172a">Timbratura Matteo Neri</strong><br />Entrata · 09:03</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- 14 · Admin generale -->
+        <sc-if value="{{ is14 }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:16px;padding:22px"><div style="font-size:38px;font-weight:800;color:#065f46;animation:jobCount .5s both">42</div><div style="font-size:13px;color:#047857;font-weight:600">Presenti ora</div></div>
+            <div style="background:#fff;border:1px solid #e8edf4;border-radius:16px;padding:22px"><div style="font-size:38px;font-weight:800;color:#0f172a;animation:jobCount .5s .1s both">59</div><div style="font-size:13px;color:#64748b;font-weight:600">Animatori totali</div></div>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:12px">Sedi</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <sc-for list="{{ sedi }}" as="s" hint-placeholder-count="2">
+                <div style="background:#fff;border:1px solid #e8edf4;border-radius:18px;padding:20px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 24px rgba(15,23,42,.05);transition:transform .18s,box-shadow .18s" style-hover="transform:translateY(-3px);box-shadow:0 16px 34px rgba(15,23,42,.1)">
+                  <span style="width:52px;height:52px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;background:{{ s.tile }}"><svg viewBox="0 0 24 24" width="28" height="28" fill="{{ s.ink }}"><path d="M11 2h2v3h3v2h-3v3l6 4v10h-7v-5h-2v5H3V14l6-4V7H6V5h3z" /></svg></span>
+                  <span style="flex:1"><span style="display:block;font-size:16px;font-weight:800;color:#0f172a">{{ s.nome }}</span><span style="display:block;font-size:12.5px;color:#64748b;margin-top:3px">{{ s.info }}</span></span>
+                  <button onClick="{{ s.apri }}" style="border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-weight:700;font-size:13px;padding:9px 18px;border-radius:10px" style-hover="background:#4338ca">Apri</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- 15 · Creazione modulo -->
+        <sc-if value="{{ is15 }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:18px;align-items:start">
+          <div style="background:#fff;border:1px solid #e8edf4;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:18px">
+            <div style="font-size:16px;font-weight:800;color:#0f172a">Nuovo modulo</div>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#475569">Titolo
+              <input value="Presenza settimana 3" style="border:1px solid #dbe2ec;background:#f8fafc;border-radius:11px;padding:12px 13px;font-family:inherit;font-size:14px;color:#0f172a;font-weight:500;outline:none" style-focus="border-color:#4f46e5;background:#fff" />
+            </label>
+            <div>
+              <div style="font-size:12.5px;font-weight:600;color:#475569;margin-bottom:8px">Domande</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ domande }}" as="d" hint-placeholder-count="1">
+                  <div style="border:1px solid #e8edf4;border-radius:13px;padding:14px;display:flex;flex-direction:column;gap:10px">
+                    <div style="font-size:14px;font-weight:700;color:#0f172a">{{ d.testo }}</div>
+                    <div style="display:flex;gap:8px">
+                      <span style="border:1px solid #e2e8f0;border-radius:8px;padding:6px 14px;font-size:12.5px;color:#475569">Sì</span>
+                      <span style="border:1px solid #e2e8f0;border-radius:8px;padding:6px 14px;font-size:12.5px;color:#475569">No</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <button onClick="{{ aggiungiDomanda }}" style="margin-top:10px;border:1px dashed #a5b4fc;cursor:pointer;background:#f8faff;color:#4f46e5;font-family:inherit;font-weight:700;font-size:13px;padding:11px 16px;border-radius:11px" style-hover="background:#eef2ff">+ Aggiungi domanda</button>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8edf4;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px">
+            <div style="font-size:15px;font-weight:800;color:#0f172a">Invia a</div>
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ destinatari }}" as="d" hint-placeholder-count="3">
+                <sc-if value="{{ d.on }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ d.toggle }}" style="display:flex;align-items:center;gap:10px;text-align:left;border:1.5px solid #4f46e5;background:#eef2ff;border-radius:11px;padding:11px;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:700;color:#0f172a"><span style="width:18px;height:18px;border-radius:5px;background:#4f46e5;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">✓</span>{{ d.label }}</button>
+                </sc-if>
+                <sc-if value="{{ d.off }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ d.toggle }}" style="display:flex;align-items:center;gap:10px;text-align:left;border:1px solid #e2e8f0;background:#fff;border-radius:11px;padding:11px;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:600;color:#475569" style-hover="border-color:#a5b4fc"><span style="width:18px;height:18px;border-radius:5px;border:1.5px solid #cbd5e1"></span>{{ d.label }}</button>
+                </sc-if>
+              </sc-for>
+            </div>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#475569">Scadenza
+              <input type="date" value="2026-10-08" style="border:1px solid #dbe2ec;background:#f8fafc;border-radius:11px;padding:11px 13px;font-family:inherit;font-size:13.5px;color:#0f172a;outline:none" />
+            </label>
+            <div style="flex:1"></div>
+            <button onClick="{{ pubblica }}" style="border:none;cursor:pointer;background:#4f46e5;color:#fff;font-family:inherit;font-weight:700;font-size:14.5px;padding:13px;border-radius:11px;box-shadow:0 8px 18px rgba(79,70,229,.28)" style-hover="background:#4338ca">{{ testoPubblica }}</button>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- 16 · Presenze calendario -->
+        <sc-if value="{{ is16 }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <span style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:#475569">01/09/2026 → 30/09/2026</span>
+            <span style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:#475569">Jerago</span>
+            <span style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:#475569">Tutti</span>
+            <div style="flex:1"></div>
+            <button onClick="{{ esporta }}" style="border:none;cursor:pointer;background:#0f1a33;color:#fff;font-family:inherit;font-weight:700;font-size:13px;padding:10px 18px;border-radius:10px" style-hover="background:#1c2a4d">{{ testoEsporta }}</button>
+          </div>
+          <div style="background:#fff;border:1px solid #e8edf4;border-radius:16px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:180px repeat(7,1fr);background:#f8fafc;border-bottom:1px solid #e8edf4">
+              <div style="padding:12px 16px;font-size:12px;font-weight:700;color:#94a3b8">Animatore</div>
+              <sc-for list="{{ giorniSettimana }}" as="d" hint-placeholder-count="7">
+                <div style="padding:12px 8px;font-size:12px;font-weight:700;color:#94a3b8;text-align:center">{{ d }}</div>
+              </sc-for>
+            </div>
+            <sc-for list="{{ grigliaPresenze }}" as="r" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:180px repeat(7,1fr);border-bottom:1px solid #f1f5f9;transition:background .16s;animation:jobSlideIn .4s both" style-hover="background:#f8fafc">
+                <div style="padding:13px 16px;font-size:13.5px;font-weight:600;color:#0f172a">{{ r.nome }}</div>
+                <sc-for list="{{ r.celle }}" as="c" hint-placeholder-count="7">
+                  <div style="padding:13px 8px;text-align:center;font-size:14px;font-weight:700;animation:jobIn .5s both;color:{{ c.color }}">{{ c.sym }}</div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240,&quot;height&quot;:960}}">
+const SCREENS = [
+  ['s1','Login'],['s2','Registrazione 1'],['s3','Registrazione 2'],['s4','Richiesta inviata'],
+  ['s5','Home animatore'],['s7','Fuori area'],['s8','Le mie presenze'],['s9','Moduli'],['s10','Profilo'],
+  ['s11','Dashboard oratorio'],['s12','Animatori'],['s13','Impostazioni GPS'],
+  ['s14','Admin generale'],['s15','Nuovo modulo'],['s16','Calendario presenze']
+];
+const DESKTOP = ['s11','s14','s15','s16'];
+const ANIMATORI = [
+  { nome:'Marco Rossi', entrata:'08:02', ore:'5h 32m', presente:true },
+  { nome:'Luca Bianchi', entrata:'08:15', ore:'5h 19m', presente:true },
+  { nome:'Anna Verdi', entrata:'—', ore:'—', presente:false },
+  { nome:'Matteo Neri', entrata:'09:03', ore:'4h 12m', presente:true },
+  { nome:'Giulia Ferrari', entrata:'08:37', ore:'4h 38m', presente:true }
+];
+const MESI = ['Luglio 2026','Agosto 2026','Settembre 2026','Ottobre 2026'];
+
+class Component extends DCLogic {
+  state = {
+    screen:'s1', timbrato:false, oraEntrata:'08:17', oraUscita:null,
+    oratorio:'Jerago', meseIdx:2, filtro:'Tutti',
+    moduliFatti:{}, gps:{ Jerago:{on:true,raggio:50}, Besnate:{on:false,raggio:75} },
+    destinatari:{ Tutti:true, Jerago:false, Besnate:false },
+    nDomande:1, salvato:false, pubblicato:false, esportato:false, approvato:false
+  };
+
+  go = (k) => () => this.setState({ screen:k });
+
+  renderVals() {
+    const s = this.state, v = {};
+    SCREENS.forEach(([k]) => { v['is'+parseInt(k.slice(1),10)] = s.screen === k; });
+    for (let i = 1; i <= 16; i++) if (v['is'+i] === undefined) v['is'+i] = false;
+
+    v.screens = SCREENS.map(([k,label], i) => ({
+      key:k, num:i+1, label, go:this.go(k),
+      active:s.screen===k, inactive:s.screen!==k
+    }));
+    [1,2,3,4,5,7,8,9,10,11,12,13,14,15,16].forEach(n => { v['go'+n] = this.go('s'+n); });
+    v.goHome = this.go('s5');
+
+    v.isDesktop = DESKTOP.indexOf(s.screen) >= 0;
+    v.isMobile = !v.isDesktop;
+
+    v.timbrato = s.timbrato; v.nonTimbrato = !s.timbrato;
+    v.oraEntrata = s.oraEntrata;
+    v.rigaEntrata = s.timbrato ? s.oraEntrata : '—';
+    v.rigaUscita = s.oraUscita || '—';
+    v.rigaTotale = s.oraUscita ? '4h 48m' : (s.timbrato ? 'in corso' : '—');
+    v.entrata = () => this.setState({ timbrato:true, oraEntrata:'08:17', oraUscita:null });
+    v.uscita = () => this.setState({ timbrato:false, oraUscita:'13:05' });
+
+    v.oratori = [
+      { nome:'Jerago', desc:'Oratorio di Jerago', tile:'linear-gradient(140deg,#fee2e2,#fecaca)', ink:'#dc2626' },
+      { nome:'Besnate', desc:'Oratorio di Besnate', tile:'linear-gradient(140deg,#d1fae5,#a7f3d0)', ink:'#059669' }
+    ].map(o => ({ ...o, selected:s.oratorio===o.nome, unselected:s.oratorio!==o.nome,
+      pick:() => this.setState({ oratorio:o.nome }) }));
+
+    v.mese = MESI[s.meseIdx];
+    v.mesePrev = () => this.setState(p => ({ meseIdx:Math.max(0,p.meseIdx-1) }));
+    v.meseNext = () => this.setState(p => ({ meseIdx:Math.min(MESI.length-1,p.meseIdx+1) }));
+    v.barre = [38,62,44,80,55,70,48].map((h, i) => ({
+      h: h + '%', o: 0.45 + i * 0.08, d: (i * 70) + 'ms'
+    }));
+    v.giorni = [
+      { giorno:'08', mese:'SET', orario:'08:17 → 13:05', ore:'4h 48m' },
+      { giorno:'07', mese:'SET', orario:'08:04 → 13:12', ore:'5h 08m' },
+      { giorno:'06', mese:'SET', orario:'08:20 → 12:44', ore:'4h 24m' },
+      { giorno:'05', mese:'SET', orario:'09:02 → 12:30', ore:'3h 28m' }
+    ];
+
+    const moduli = [
+      { id:'m1', titolo:'Presenza settimana 2', scadenza:'Scade domani' },
+      { id:'m2', titolo:'Gita oratorio', scadenza:'Scade 12 settembre' }
+    ];
+    v.moduli = moduli.map(m => {
+      const fatto = !!s.moduliFatti[m.id];
+      return { ...m, fatto, aperto:!fatto, compila:() => this.setState(p => ({ moduliFatti:{ ...p.moduliFatti, [m.id]:true } })) };
+    });
+    v.daCompilare = moduli.filter(m => !s.moduliFatti[m.id]).length;
+
+    v.vociProfilo = [
+      { label:'Le mie info', go:this.go('s10') },
+      { label:'Le mie presenze', go:this.go('s8') },
+      { label:'I miei moduli', go:this.go('s9') },
+      { label:'Impostazioni', go:this.go('s10') }
+    ];
+
+    const navItems = [['Home','s5'],['Presenze','s8'],['Moduli','s9'],['Profilo','s10']];
+    v.showNav = ['s5','s8','s9','s10'].indexOf(s.screen) >= 0;
+    v.nav = navItems.map(([label,k]) => ({ label, go:this.go(k), active:s.screen===k, inactive:s.screen!==k }));
+
+    v.filtri = ['Tutti','Presenti','Assenti'].map(f => ({
+      label:f, active:s.filtro===f, inactive:s.filtro!==f, pick:() => this.setState({ filtro:f })
+    }));
+    const dec = a => ({ ...a, dot:a.presente ? '#10b981' : '#ef4444',
+      stato:a.presente ? ('Entrata ' + a.entrata) : 'Non ancora entrata' });
+    v.animatori = ANIMATORI.map(dec);
+    v.animatoriFiltrati = v.animatori.filter(a =>
+      s.filtro==='Tutti' || (s.filtro==='Presenti' ? a.presente : !a.presente));
+    v.approva = () => this.setState({ approvato:true });
+
+    v.sediGps = ['Jerago','Besnate'].map(n => ({
+      nome:n, on:s.gps[n].on, off:!s.gps[n].on, raggio:s.gps[n].raggio,
+      ink:n==='Jerago' ? '#dc2626' : '#059669',
+      coord:n==='Jerago' ? '45.6973, 8.7981' : '45.6701, 8.8283',
+      toggle:() => this.setState(p => ({ gps:{ ...p.gps, [n]:{ ...p.gps[n], on:!p.gps[n].on } } })),
+      setRaggio:(e) => { const val = +e.target.value; this.setState(p => ({ gps:{ ...p.gps, [n]:{ ...p.gps[n], raggio:val } }, salvato:false })); }
+    }));
+    v.salvato = () => this.setState({ salvato:true });
+    v.testoSalva = s.salvato ? 'Impostazioni salvate ✓' : 'Salva impostazioni';
+
+    const generale = s.screen==='s14';
+    v.nomeAdmin = generale ? 'Admin Generale' : 'Admin Jerago';
+    v.inizialiAdmin = generale ? 'AG' : 'AJ';
+    v.sedeCorrente = generale ? 'Comunità Pastorale' : 'Jerago';
+    v.titoloDesktop = s.screen==='s11' ? 'Dashboard · Jerago'
+      : generale ? 'Comunità Pastorale · 8 Settembre 2026'
+      : s.screen==='s15' ? 'Moduli' : 'Presenze';
+    v.adminNav = [
+      ['Dashboard','s11'],['Sedi','s14'],['Animatori','s12'],
+      ['Presenze','s16'],['Moduli','s15'],['Impostazioni','s13']
+    ].map(([label,k]) => ({ label, go:this.go(k), active:s.screen===k, inactive:s.screen!==k }));
+
+    v.sedi = [
+      { nome:'Jerago', info:'24 presenti · 32 animatori', tile:'linear-gradient(140deg,#fee2e2,#fecaca)', ink:'#dc2626', apri:this.go('s11') },
+      { nome:'Besnate', info:'18 presenti · 27 animatori', tile:'linear-gradient(140deg,#d1fae5,#a7f3d0)', ink:'#059669', apri:this.go('s11') }
+    ];
+
+    v.domande = Array.from({ length:s.nDomande }, (_, i) => ({
+      testo: i===0 ? 'Sarai presente venerdì?' : 'Domanda ' + (i+1)
+    }));
+    v.aggiungiDomanda = () => this.setState(p => ({ nDomande:p.nDomande+1, pubblicato:false }));
+    v.destinatari = ['Tutti','Jerago','Besnate'].map(d => ({
+      label:d, on:s.destinatari[d], off:!s.destinatari[d],
+      toggle:() => this.setState(p => ({ destinatari:{ ...p.destinatari, [d]:!p.destinatari[d] } }))
+    }));
+    v.pubblica = () => this.setState({ pubblicato:true });
+    v.testoPubblica = s.pubblicato ? 'Modulo pubblicato ✓' : 'Pubblica modulo';
+
+    v.giorniSettimana = ['Lun 7','Mar 8','Mer 9','Gio 10','Ven 11','Sab 12','Dom 13'];
+    v.grigliaPresenze = ANIMATORI.map((a, r) => ({
+      nome:a.nome,
+      celle:[0,1,2,3,4,5,6].map(c => {
+        const k = (r*3 + c*2) % 7;
+        const stato = k === 0 ? 'assente' : k === 1 ? 'vuoto' : 'presente';
+        return { sym: stato==='presente' ? '✓' : stato==='assente' ? '✕' : '–',
+          color: stato==='presente' ? '#10b981' : stato==='assente' ? '#ef4444' : '#cbd5e1' };
+      })
+    }));
+    v.esporta = () => this.setState({ esportato:true });
+    v.testoEsporta = s.esportato ? 'Esportato ✓' : 'Esporta CSV';
+
+    return v;
+  }
+}
+</script>
+</body>
+</html>

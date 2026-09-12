@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-900: #1e2358;
+
+  --color-accent-cyan: #22d3ee;
+
+  --color-ink-950: #0f172a;
+  --color-ink-900: #0f1a33;
+  --color-ink-800: #1c2a4d;
+
+  --color-good-50: #ecfdf5;
+  --color-good-100: #d1fae5;
+  --color-good-300: #6ee7b7;
+  --color-good-500: #10b981;
+  --color-good-700: #047857;
+  --color-good-900: #065f46;
+
+  --color-bad-50: #fee2e2;
+  --color-bad-100: #fecaca;
+  --color-bad-500: #ef4444;
+  --color-bad-600: #dc2626;
+
+  --color-warn-50: #fffbeb;
+  --color-warn-200: #fde68a;
+  --color-warn-500: #f59e0b;
+  --color-warn-700: #92400e;
+
+  --animate-pop: job-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  --animate-up: job-up 0.45s both;
+  --animate-ring: job-ring 2.4s ease-out infinite;
+  --animate-grow: job-grow 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes job-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes job-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes job-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes job-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(1200px 700px at 20% -10%, #dfe6f7, transparent),
+    radial-gradient(1000px 600px at 100% 10%, #e7e2f8, transparent),
+    #e9edf5;
+  color: var(--color-ink-950);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+}
