@@ -5,8 +5,10 @@
 // questa app invece del pairing "primo ingresso/prima uscita successiva"
 // della versione originale.
 
-import { db, tick } from './db'
+import { tick } from './db'
 import { scopedOratories } from '../utils/authz'
+import { listAnimatori } from './profilesService'
+import { listEntriesForOratories } from './timeEntriesService'
 import { groupSessionsByDay, dayTotalMinutes } from '../lib/timeSessions'
 import type { OratoryId, Profile, TimeEntry } from '../types'
 
@@ -61,17 +63,13 @@ function hourlyDistribution(entries: TimeEntry[], type: TimeEntry['type']) {
 export async function getStats(actor: Profile, filters: StatsFilters): Promise<StatsResult> {
   const scoped = scopedOratories(actor)
   const oratoryIds = filters.oratoryId ? scoped.filter((o) => o === filters.oratoryId) : scoped
-  const database = db.get()
   const start = new Date(`${filters.dal}T00:00:00`)
   const end = new Date(`${filters.al}T23:59:59.999`)
 
-  const profiles = database.profiles.filter((p) => p.role === 'animatore' && p.oratoryId && oratoryIds.includes(p.oratoryId))
+  const profiles = await listAnimatori(actor)
   const profileIds = new Set(profiles.map((p) => p.id))
 
-  let entries = database.timeEntries.filter((e) => {
-    const t = new Date(e.timestamp)
-    return profileIds.has(e.userId) && oratoryIds.includes(e.oratoryId) && t >= start && t <= end
-  })
+  let entries = (await listEntriesForOratories(oratoryIds, start, end)).filter((e) => profileIds.has(e.userId))
   if (filters.animatoreId) entries = entries.filter((e) => e.userId === filters.animatoreId)
 
   const byUser = new Map<string, TimeEntry[]>()

@@ -27,10 +27,14 @@ export function HomePage() {
   const [busy, setBusy] = useState(false)
   const [qaPending, setQaPending] = useState<QaAction | null>(() => consumePendingQa())
 
-  const refresh = useCallback(() => {
+  const refresh = useCallback(async () => {
     if (!user) return
-    setOpen(timeEntriesService.getOpenEntry(user.id))
-    setToday(timeEntriesService.getTodayPair(user.id))
+    const [openEntry, todayPair] = await Promise.all([
+      timeEntriesService.getOpenEntry(user.id),
+      timeEntriesService.getTodayPair(user.id),
+    ])
+    setOpen(openEntry)
+    setToday(todayPair)
   }, [user])
 
   useEffect(() => { refresh() }, [refresh])
@@ -40,9 +44,9 @@ export function HomePage() {
     oratoriesService.getOratory(user.oratoryId).then((o) => {
       setOratory(o)
       if (o?.gpsEnabled) {
-        locate().then((geo) => {
+        locate().then(async (geo) => {
           if (!geo) return
-          const preview = timeEntriesService.previewDistance(user.oratoryId!, geo)
+          const preview = await timeEntriesService.previewDistance(user.oratoryId!, geo)
           if (preview?.distance != null) setDistancePreview(Math.round(preview.distance))
         })
       }

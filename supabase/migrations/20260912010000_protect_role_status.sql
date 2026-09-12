@@ -7,6 +7,11 @@ create or replace function public.protect_profile_privileged_columns()
 returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
+  -- auth.uid() è nullo quando non c'è una sessione Supabase Auth (SQL editor,
+  -- migrazioni, service_role): un contesto già pienamente fidato, da non bloccare.
+  if auth.uid() is null then
+    return new;
+  end if;
   if (new.role is distinct from old.role or new.status is distinct from old.status) then
     if not public.is_admin() then
       raise exception 'Non hai i permessi per modificare ruolo o stato del profilo.';

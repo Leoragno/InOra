@@ -22,12 +22,21 @@ export function AdminAnimatoriPage() {
   const [rows, setRows] = useState<Profile[] | null>(null)
   const [query, setQuery] = useState('')
   const [filtro, setFiltro] = useState<Filtro>('Tutti')
+  const [presenceMap, setPresenceMap] = useState<Record<string, boolean>>({})
 
   const load = () => {
     if (!user) return
     profilesService.listAnimatori(user).then(setRows)
   }
   useEffect(load, [user])
+
+  useEffect(() => {
+    const active = (rows ?? []).filter((r) => r.status === 'active')
+    if (!active.length) return
+    Promise.all(active.map((r) => getOpenEntry(r.id).then((open) => [r.id, !!open] as const))).then((entries) => {
+      setPresenceMap(Object.fromEntries(entries))
+    })
+  }, [rows])
 
   const pending = rows?.filter((r) => r.status === 'pending') ?? []
   const active = useMemo(() => {
@@ -36,10 +45,10 @@ export function AdminAnimatoriPage() {
       const matchesQuery = `${r.firstName} ${r.lastName}`.toLowerCase().includes(query.toLowerCase())
       if (!matchesQuery) return false
       if (filtro === 'Tutti') return true
-      const present = !!getOpenEntry(r.id)
+      const present = !!presenceMap[r.id]
       return filtro === 'Presenti' ? present : !present
     })
-  }, [rows, query, filtro])
+  }, [rows, query, filtro, presenceMap])
 
   async function handleApprove(id: string) {
     if (!user) return
@@ -112,7 +121,7 @@ export function AdminAnimatoriPage() {
       ) : (
         <div className="flex flex-col gap-2.5">
           {active.map((a) => {
-            const present = !!getOpenEntry(a.id)
+            const present = !!presenceMap[a.id]
             return (
               <button
                 key={a.id}
