@@ -7,7 +7,6 @@ import { useToast } from '../../hooks/useToast'
 import { Avatar } from '../../components/Avatar'
 import { Card } from '../../components/Card'
 import { Button } from '../../components/Button'
-import { EntrataCelebration } from '../../components/EntrataCelebration'
 import * as timeEntriesService from '../../services/timeEntriesService'
 import * as oratoriesService from '../../services/oratoriesService'
 import { TimeEntryStateError } from '../../services/timeEntriesService'
@@ -27,7 +26,6 @@ export function HomePage() {
   const [distancePreview, setDistancePreview] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
   const [qaPending, setQaPending] = useState<QaAction | null>(() => consumePendingQa())
-  const [celebration, setCelebration] = useState<{ time: string } | null>(null)
 
   const refresh = useCallback(async () => {
     if (!user) return
@@ -68,8 +66,7 @@ export function HomePage() {
         : await timeEntriesService.clockOut(user, user.oratoryId, metodo === 'qr' ? 'qr' : 'manuale')
       setQaPending(null)
       if (result.warning) toast.info(result.warning)
-      else if (action === 'in') setCelebration({ time: result.entry.timestamp })
-      else toast.success('Timbratura di uscita completata')
+      else toast.success(action === 'in' ? 'Timbratura di entrata completata' : 'Timbratura di uscita completata')
       refresh()
     } catch (err) {
       if (err instanceof TimeEntryStateError) toast.error(err.message)
@@ -88,10 +85,6 @@ export function HomePage() {
 
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-5 px-5 pb-6 pt-5 lg:max-w-2xl lg:px-8 lg:pt-8">
-      {celebration && (
-        <EntrataCelebration firstName={user.firstName} time={celebration.time} onClose={() => setCelebration(null)} />
-      )}
-
       <div className="flex items-start justify-between">
         <div>
           <div className="text-[22px] font-extrabold text-ink-950">Ciao {user.firstName} 👋</div>
