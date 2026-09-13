@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Clock, FileText, MapPin, QrCode } from 'lucide-react'
+import { CalendarCheck, Clock, FileText, MapPin, QrCode } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { useGeolocation } from '../../hooks/useGeolocation'
 import { useToast } from '../../hooks/useToast'
@@ -11,6 +11,7 @@ import * as timeEntriesService from '../../services/timeEntriesService'
 import * as oratoriesService from '../../services/oratoriesService'
 import { TimeEntryStateError } from '../../services/timeEntriesService'
 import { consumePendingQa, type QaAction } from '../../lib/pendingQa'
+import { haptic } from '../../lib/haptics'
 import { formatTime, minutesBetween, formatDurationMinutes } from '../../lib/format'
 import type { Oratory, TimeEntry } from '../../types'
 
@@ -58,6 +59,7 @@ export function HomePage() {
 
   async function handleClock(action: 'in' | 'out') {
     if (busy || !user?.oratoryId) return
+    haptic('light')
     setBusy(true)
     try {
       const metodo = qaPending ? 'qr' : 'gps'
@@ -67,8 +69,10 @@ export function HomePage() {
       setQaPending(null)
       if (result.warning) toast.info(result.warning)
       else toast.success(action === 'in' ? 'Timbratura di entrata completata' : 'Timbratura di uscita completata')
+      haptic('success')
       refresh()
     } catch (err) {
+      haptic('error')
       if (err instanceof TimeEntryStateError) toast.error(err.message)
       else toast.error(err instanceof Error ? err.message : 'Impossibile completare la timbratura')
       refresh()
@@ -163,6 +167,7 @@ export function HomePage() {
 
       <div className="grid grid-cols-2 gap-3">
         <QuickLink to="/presenze" icon={<Clock size={16} className="text-white" />} gradient="from-brand-500 to-accent-cyan" label="Le mie presenze" onNavigate={navigate} />
+        <QuickLink to="/disponibilita" icon={<CalendarCheck size={16} className="text-white" />} gradient="from-good-500 to-accent-cyan" label="Disponibilità" onNavigate={navigate} />
         <QuickLink to="/moduli" icon={<FileText size={16} className="text-white" />} gradient="from-warn-500 to-[#fb7185]" label="Moduli" onNavigate={navigate} />
       </div>
     </div>

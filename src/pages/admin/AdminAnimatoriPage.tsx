@@ -10,6 +10,7 @@ import { Button } from '../../components/Button'
 import { TextInput } from '../../components/Field'
 import { Avatar } from '../../components/Avatar'
 import { EmptyState, Spinner } from '../../components/Feedback'
+import { useAppBadge } from '../../hooks/useAppBadge'
 import type { Profile } from '../../types'
 
 const ORATORY_LABEL: Record<string, string> = { jerago: 'Jerago', besnate: 'Besnate' }
@@ -39,6 +40,7 @@ export function AdminAnimatoriPage() {
   }, [rows])
 
   const pending = rows?.filter((r) => r.status === 'pending') ?? []
+  useAppBadge(pending.length)
   const active = useMemo(() => {
     const list = (rows ?? []).filter((r) => r.status === 'active')
     return list.filter((r) => {

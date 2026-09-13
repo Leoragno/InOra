@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { BarChart3, ChevronRight, LogOut, QrCode, Settings } from 'lucide-react'
+import { BarChart3, Bell, CalendarCheck, ChevronRight, LogOut, QrCode, Settings } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { Avatar } from '../../components/Avatar'
 import { Card } from '../../components/Card'
@@ -24,6 +24,11 @@ export function AdminAltroPage() {
       </div>
 
       <Card className="!p-0 overflow-hidden">
+        <button onClick={() => navigate('/admin/disponibilita')} className="flex w-full items-center gap-3 border-b border-slate-100 px-4 py-4 text-left hover:bg-slate-50">
+          <span className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-cyan text-white"><CalendarCheck size={14} /></span>
+          <span className="flex-1 text-sm font-semibold text-ink-950">Disponibilità</span>
+          <ChevronRight size={16} className="text-slate-300" />
+        </button>
         <button onClick={() => navigate('/admin/statistiche')} className="flex w-full items-center gap-3 border-b border-slate-100 px-4 py-4 text-left hover:bg-slate-50">
           <span className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-cyan text-white"><BarChart3 size={14} /></span>
           <span className="flex-1 text-sm font-semibold text-ink-950">Statistiche</span>
@@ -32,6 +37,11 @@ export function AdminAltroPage() {
         <button onClick={() => navigate('/admin/qr')} className="flex w-full items-center gap-3 border-b border-slate-100 px-4 py-4 text-left hover:bg-slate-50">
           <span className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-cyan text-white"><QrCode size={14} /></span>
           <span className="flex-1 text-sm font-semibold text-ink-950">QR Code</span>
+          <ChevronRight size={16} className="text-slate-300" />
+        </button>
+        <button onClick={() => navigate('/admin/notifiche')} className="flex w-full items-center gap-3 border-b border-slate-100 px-4 py-4 text-left hover:bg-slate-50">
+          <span className="flex h-[26px] w-[26px] items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-cyan text-white"><Bell size={14} /></span>
+          <span className="flex-1 text-sm font-semibold text-ink-950">Notifiche</span>
           <ChevronRight size={16} className="text-slate-300" />
         </button>
         <button onClick={() => navigate('/admin/gps')} className="flex w-full items-center gap-3 px-4 py-4 text-left hover:bg-slate-50">

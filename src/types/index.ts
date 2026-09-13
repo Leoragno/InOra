@@ -122,3 +122,29 @@ export interface GeoResult {
 }
 
 export type GeoStatus = 'idle' | 'locating' | 'ok' | 'denied' | 'unavailable' | 'timeout'
+
+/** Lun-Ven, indice 0-4 (mai sabato/domenica — attività oratorio in settimana). */
+export const GIORNI_DISPONIBILITA = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì'] as const
+
+export interface AvailabilityWeek {
+  id: string
+  oratoryId: OratoryId
+  name: string
+  dateInfo: string
+  activeDays: number[]
+  closed: boolean
+  sortOrder: number
+  createdAt: string
+}
+
+export type AvailabilityStatus = 'disponibile' | 'non_disponibile'
+
+export interface AvailabilityResponse {
+  id: string
+  weekId: string
+  userId: string
+  dayIndex: number
+  status: AvailabilityStatus | null
+  note: string
+  updatedAt: string
+}

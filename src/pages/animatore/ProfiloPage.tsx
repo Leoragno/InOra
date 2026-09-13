@@ -1,9 +1,10 @@
-import { useRef, useState, type ChangeEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Camera, ChevronRight, Clock, FileText, LogOut, UserRound } from 'lucide-react'
+import { Bell, Camera, ChevronRight, Clock, FileText, LogOut, UserRound } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { useToast } from '../../hooks/useToast'
 import * as profilesService from '../../services/profilesService'
+import * as pushService from '../../services/pushService'
 import { Avatar } from '../../components/Avatar'
 import { Card } from '../../components/Card'
 
@@ -15,8 +16,35 @@ export function ProfiloPage() {
   const toast = useToast()
   const fileRef = useRef<HTMLInputElement>(null)
   const [showInfo, setShowInfo] = useState(false)
+  const [pushEnabled, setPushEnabled] = useState(false)
+  const [pushBusy, setPushBusy] = useState(false)
+  const pushSupported = pushService.isPushSupported()
+
+  useEffect(() => {
+    if (!pushSupported) return
+    pushService.getPushSubscription().then((sub) => setPushEnabled(!!sub))
+  }, [pushSupported])
 
   if (!user) return null
+
+  async function togglePush() {
+    setPushBusy(true)
+    try {
+      if (pushEnabled) {
+        await pushService.unsubscribeFromPush()
+        setPushEnabled(false)
+        toast.info('Notifiche disattivate')
+      } else {
+        await pushService.subscribeToPush(user!.id)
+        setPushEnabled(true)
+        toast.success('Notifiche attivate')
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Errore con le notifiche')
+    } finally {
+      setPushBusy(false)
+    }
+  }
 
   async function onPickAvatar(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -60,6 +88,20 @@ export function ProfiloPage() {
         <MenuRow icon={<Clock size={15} />} label="Le mie presenze" onClick={() => navigate('/presenze')} />
         <MenuRow icon={<FileText size={15} />} label="I miei moduli" onClick={() => navigate('/moduli')} last />
       </Card>
+
+      {pushSupported && (
+        <Card className="flex items-center gap-3">
+          <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-cyan text-white"><Bell size={14} /></span>
+          <span className="flex-1 text-sm font-semibold text-ink-950">Notifiche push</span>
+          <button
+            disabled={pushBusy}
+            onClick={togglePush}
+            className={`flex h-[26px] w-[46px] items-center rounded-full p-[3px] transition-colors disabled:opacity-50 ${pushEnabled ? 'justify-end bg-good-500' : 'justify-start bg-slate-300'}`}
+          >
+            <span className="h-5 w-5 rounded-full bg-white" />
+          </button>
+        </Card>
+      )}
 
       {showInfo && (
         <Card className="animate-up flex flex-col gap-2.5 text-[13px]">
